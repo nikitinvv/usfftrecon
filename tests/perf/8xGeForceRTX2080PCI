@@ -1,11 +1,11 @@
-data shape: (1500, 2448, 2448) number of gpus: 1 rec norm: 75.022194 rec time: 85.79385089874268
-data shape: (1500, 2448, 2448) number of gpus: 2 rec norm: 75.022194 rec time: 79.03351068496704
-data shape: (1500, 2448, 2448) number of gpus: 3 rec norm: 75.022194 rec time: 63.520891189575195
-data shape: (1500, 2448, 2448) number of gpus: 4 rec norm: 75.022194 rec time: 53.44302415847778
-data shape: (1500, 2448, 2448) number of gpus: 5 rec norm: 75.022194 rec time: 50.16028714179993
-data shape: (1500, 2448, 2448) number of gpus: 6 rec norm: 75.022194 rec time: 47.998297929763794
-data shape: (1500, 2448, 2448) number of gpus: 7 rec norm: 75.022194 rec time: 46.149765491485596
-data shape: (1500, 2448, 2448) number of gpus: 8 rec norm: 75.022194 rec time: 43.0218071937561
+data shape: (1500, 2048, 2448) number of gpus: 1 rec norm: 68.62608 rec time: 65.73070454597473
+data shape: (1500, 2048, 2448) number of gpus: 2 rec norm: 68.62608 rec time: 56.17390807469686
+data shape: (1500, 2048, 2448) number of gpus: 3 rec norm: 68.62608 rec time: 42.12694279352824
+data shape: (1500, 2048, 2448) number of gpus: 4 rec norm: 68.62608 rec time: 36.060380935668945
+data shape: (1500, 2048, 2448) number of gpus: 5 rec norm: 68.62608 rec time: 34.79168430964152
+data shape: (1500, 2048, 2448) number of gpus: 6 rec norm: 68.62608 rec time: 34.61739126841227
+data shape: (1500, 2048, 2448) number of gpus: 7 rec norm: 68.62608 rec time: 31.93800099690755
+data shape: (1500, 2048, 2448) number of gpus: 8 rec norm: 68.62608 rec time: 30.637180248896282
 
 
 +-----------------------------------------------------------------------------+
