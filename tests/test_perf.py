@@ -4,7 +4,7 @@ import usfftrecon as pt
 from timing import *
 import scipy.ndimage as ndimage
 if __name__ == "__main__":
-    
+# Performance tests on multi gpus    
     # Model parameters
     n = 2448  # object size in x,y
     nz = n  # object size in z

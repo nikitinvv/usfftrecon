@@ -13,7 +13,7 @@ class SolverTomo(radonusfft):
     This class is a context manager which provides the basic operators required
     to implement a tomography solver. It also manages memory automatically,
     and provides correct cleanup for interruptions or terminations.
-    Attribtues
+    Attributes
     ----------
     ntheta : int
         The number of projections.    
@@ -27,7 +27,7 @@ class SolverTomo(radonusfft):
     """
 
     def __init__(self, theta, nz, n, pnz, center, ngpus):
-        """Please see help(SolverTomo) for more info."""
+        """Init the base class with allocating gpu memory in c++ context."""
 
         # create class for the tomo transform associated
         super().__init__(len(theta), pnz, n, center, cp.array(

@@ -2,9 +2,9 @@ import dxchange
 import numpy as np
 import usfftrecon as pt
 from timing import *
-import scipy.ndimage as ndimage
+
 if __name__ == "__main__":
-    
+# Example of experimental data recontruction 
     # Number of gpus
     ngpus = 1        
     # Model parameters
