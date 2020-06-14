@@ -16,10 +16,6 @@ class radonusfft {
 
   float2 **f;
   float2 **g;
-  float2 **ff;
-  float2 **gg;
-  float2 **f0;
-  float2 **g0;
   float **theta;
 
   float **x;
@@ -27,9 +23,9 @@ class radonusfft {
 
   float2 **fdee;
 
-  cufftHandle *plan2d;
-  
+  cufftHandle *plan2d;  
   cufftHandle *plan1d;
+
   float2 **shiftfwd;
   float2 **shiftadj;
 
@@ -40,11 +36,11 @@ public:
   size_t ntheta; // number of angles
   size_t pnz;    // number of slices
   float center;  // location of the rotation center
-  size_t ngpus;
+  size_t ngpus; // number of gpus
   radonusfft(size_t ntheta, size_t pnz, size_t n, float center, size_t theta_, size_t ngpus_);
   ~radonusfft();
   void fwd(size_t g, size_t f, size_t igpu);
-  void adj(size_t f, size_t g, size_t igpu);
+  void adj(size_t f, size_t g, size_t filterid, size_t igpu);
   void free();
 };
 

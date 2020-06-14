@@ -29,19 +29,6 @@ void __global__ divphi(float2 *g, float2 *f, float mu, int N, int Nz, int m, dir
   }
 }
 
-void __global__ circ(float2 *f, float r, int N, int Nz) {
-  int tx = blockDim.x * blockIdx.x + threadIdx.x;
-  int ty = blockDim.y * blockIdx.y + threadIdx.y;
-  int tz = blockDim.z * blockIdx.z + threadIdx.z;
-  if (tx >= N || ty >= N || tz >= Nz)
-    return;
-  int id0 = tx + ty * N + tz * N * N;
-  float x = (tx - N / 2) / float(N);
-  float y = (ty - N / 2) / float(N);
-  int lam = (4 * x * x + 4 * y * y) < 1 - r;
-  f[id0].x *= lam;
-  f[id0].y *= lam;
-}
 
 void __global__ takexy(float *x, float *y, float *theta, int N, int Ntheta) {
   int tx = blockDim.x * blockIdx.x + threadIdx.x;
@@ -101,8 +88,8 @@ void __global__ gather(float2 *g, float2 *f, float *x, float *y, int M,
   float y0 = y[tx + ty * N];
   int g_ind = (
     + tx
-    + tz * N
-    + ty * N * Nz
+    + ty * N
+    + tz * N * Ntheta
   );
   if (direction == TOMO_FWD) {
     g0.x = 0.0f;
@@ -150,7 +137,7 @@ void __global__ fftshiftc1d(float2 *f, int N, int Ntheta, int Nz) {
   if (tx >= N || ty >= Ntheta || tz >= Nz)
     return;
   int g = (1 - 2 * ((tx + 1) % 2));
-  int f_ind = tx + tz * N + ty * N * Nz;
+  int f_ind = tx + ty * N + tz * N * Ntheta;
   f[f_ind].x *= g;
   f[f_ind].y *= g;
 }
@@ -182,7 +169,7 @@ void __global__ shift(float2 *f, float2 *shift, int N, int Ntheta, int Nz) {
     return;
   float cr = shift[tx].x;
   float ci = shift[tx].y;
-  int f_ind = tx + tz * N + ty * N * Nz;
+  int f_ind = tx + ty * N + tz * N * Ntheta;
   float2 f0;
   f0.x = f[f_ind].x;
   f0.y = f[f_ind].y;
@@ -191,20 +178,24 @@ void __global__ shift(float2 *f, float2 *shift, int N, int Ntheta, int Nz) {
 }
 
 
-void __global__ applyfilter(float2 *f, int N, int Ntheta, int Nz) {
+void __global__ applyfilter(float2 *f, size_t filterid, int N, int Ntheta, int Nz) {
   int tx = blockDim.x * blockIdx.x + threadIdx.x;
   int ty = blockDim.y * blockIdx.y + threadIdx.y;
   int tz = blockDim.z * blockIdx.z + threadIdx.z;
   if (tx >= N || ty >= Ntheta || tz >= Nz)
     return;
-  int id0 = tx + ty * N + tz * Ntheta * N;
-  float rho = (tx - N / 2) / (float)N;
+  int id = tx + ty * N + tz * Ntheta * N;
+  float rho = (tx - N / 2) / (float)(N);
   float w = 0;
-  if (rho == 0)
-    w = 0;
-  else
-    w = abs(rho) * N * 4 * sin(rho) /
-        rho; //(1-fabs(rho)/coef)*(1-fabs(rho)/coef)*(1-fabs(rho)/coef);
-  f[id0].x *= w;
-  f[id0].y *= w;
+  switch (filterid)
+  {
+    case 1: w = fabs(rho); break; //ramp
+    case 2: w = fabs(rho) * sin(2*rho)/(2*rho); break; //shepp
+    case 3: w = fabs(rho) * 0.5 * (1 + cosf(2 * M_PI * rho)); break;//hann
+    case 4: w = fabs(rho) * (1-fabs(2*rho))*(1-fabs(2*rho))*(1-fabs(2*rho)); break;//parzen    
+  }
+  if(rho==0) w=0;    
+  f[id].x *= w * 4 / Ntheta / sqrtf(M_PI/2);// with normalization
+  f[id].y *= w * 4 / Ntheta / sqrtf(M_PI/2);
 }
+
