@@ -1,3 +1,5 @@
 cupy
 dxchange
+cmake
+swig
 scikit-build

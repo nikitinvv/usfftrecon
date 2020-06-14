@@ -138,7 +138,7 @@ class SolverTomo(radonusfft):
         u_gpu = np.moveaxis(u_gpu, 3, 1).reshape(2*self.pnz, self.n, self.n)
 
         # copy output function to cpu
-        u = u_gpu.get()
+        u = u_gpu[:len(ids)].get()
 
         # unlock gpu
         BUSYGPUS[gpu] = 0
@@ -152,7 +152,6 @@ class SolverTomo(radonusfft):
         ids_list = [None]*int(np.ceil(self.nz/float(2*self.pnz)))
         for k in range(0, len(ids_list)):
             ids_list[k] = range(k*2*self.pnz, min(self.nz, (k+1)*2*self.pnz))
-
         # init a global array of busy gpus, slice partitons are given to gpu whenever
         # it is not locked with computing other partition
         lock = threading.Lock()

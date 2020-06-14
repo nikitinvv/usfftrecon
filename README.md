@@ -1,8 +1,11 @@
 # usfftrecon
 multiGPU Tomography solver with the USFFT based method
 
-## Installation from source
+## Installation from source, see requirements.txt
 python setup.py install
+
+
+## 
 
 ## Tests
 Check folder tests/:
